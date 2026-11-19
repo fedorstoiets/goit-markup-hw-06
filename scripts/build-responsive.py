@@ -110,7 +110,7 @@ append("common.css", """
 /* Mobile-first container and section geometry (320 / 768 / 1158). */
 .container {
   width: 100%;
-  max-width: 320px;
+  max-width: 428px;
   padding-right: 16px;
   padding-left: 16px;
 }
@@ -298,7 +298,7 @@ append("modal.css", """
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  max-width: 320px;
+  max-width: 428px;
   padding: 72px 16px 40px;
   margin: 0 auto;
   overflow-y: auto;
