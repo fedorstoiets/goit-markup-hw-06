@@ -30,6 +30,45 @@ const path = require("node:path");
     const bad=result.documentWidth > width + 1 || result.bodyWidth > width + 1 || Math.abs(result.teamWidth - 264) > 1;
     console.log(JSON.stringify({width, ...result, pass:!bad}));
     if (bad) failed=true;
+    const styles = await page.evaluate(() => {
+      const css = (s) => getComputedStyle(document.querySelector(s));
+      const px = (selector, prop) => css(selector).getPropertyValue(prop).trim();
+      const logo = document.querySelector(".logo").getBoundingClientRect();
+      const nav = document.querySelector(".primary-navigation").getBoundingClientRect();
+      const foot = document.querySelector(".footer-container").getBoundingClientRect();
+      return {
+        containerMaxWidth: px(".container", "max-width"),
+        titleMaxWidth: px(".hero-title", "max-width"),
+        titleMarginBottom: px(".hero-title", "margin-bottom"),
+        featuresFontSize: px(".features-subtitle", "font-size"),
+        featuresWeight: px(".features-subtitle", "font-weight"),
+        featuresBodyWeight: px(".features-text", "font-weight"),
+        footerPaddingTop: px(".site-bottom", "padding-top"),
+        footerPaddingBottom: px(".site-bottom", "padding-bottom"),
+        footerInputWidth: document.querySelector(".footer-subscribe-input").getBoundingClientRect().width,
+        footerLeftMargin: foot.left,
+        footerRightMargin: window.innerWidth - foot.right,
+        logoNavGap: nav.left - logo.right,
+        addressGap: px(".address-list", "gap"),
+        addressLetterSpacing: px(".address-link", "letter-spacing")
+      };
+    });
+    console.log(JSON.stringify({width,styles}));
+    const approx=(a,b,tol=1)=>Math.abs(Number.parseFloat(a)-b)<=tol;
+    if ((width===320 && !(styles.containerMaxWidth==="320px" &&
+         styles.titleMaxWidth==="216px" && approx(styles.titleMarginBottom,72) &&
+         styles.featuresFontSize==="36px" && styles.featuresWeight==="700" &&
+         approx(styles.footerPaddingTop,96))) ||
+        (width===768 && !(approx(styles.logoNavGap,120) &&
+         approx(styles.addressGap,12) && approx(styles.titleMarginBottom,36) &&
+         styles.featuresFontSize==="36px" && styles.featuresWeight==="700" &&
+         Math.abs(styles.footerLeftMargin-styles.footerRightMargin)<=1)) ||
+        (width===1158 && !(approx(styles.titleMarginBottom,48) &&
+         approx(styles.footerPaddingTop,100)))) {
+      console.error("Formal computed CSS requirement failure", width, styles);
+      failed=true;
+    }
+
     if (width === 320) {
       await page.locator("[data-menu-open]").click();
       await page.waitForFunction(() => { const e = document.querySelector("[data-menu]"); return e.classList.contains("is-open") && getComputedStyle(e).visibility === "visible"; }, { timeout: 3000 });
