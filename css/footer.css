@@ -156,21 +156,19 @@
 @media screen and (min-width: 768px) {
   .footer-container {
     max-width: 584px;
-  }
-  .footer-container {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: flex-start;
   }
   .footer-brand {
-    margin: 0 24px 72px 108px;
+    margin: 0 24px 72px 0;
   }
   .footer-social {
     margin-bottom: 72px;
   }
   .footer-subscribe {
-    margin-left: 108px;
+    margin-left: 0;
   }
   .footer-subscribe-form {
     flex-direction: row;
@@ -184,8 +182,6 @@
 @media screen and (min-width: 1158px) {
   .footer-container {
     max-width: 1158px;
-  }
-  .footer-container {
     flex-wrap: nowrap;
   }
   .site-bottom {
