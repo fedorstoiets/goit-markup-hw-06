@@ -1,0 +1,107 @@
+/* Standalone viewport-covering mobile menu. */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.mobile-menu-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  max-width: 428px;
+  padding: 72px 16px 40px;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 24px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #e7e9fc;
+  border-radius: 50%;
+  background-color: #e7e9fc;
+  cursor: pointer;
+}
+.mobile-navigation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.mobile-navigation-link {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.11;
+  letter-spacing: 0.02em;
+  color: #2e2f42;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-navigation-link:hover,
+.mobile-navigation-link:focus {
+  color: #404bbf;
+}
+.mobile-contact-details {
+  font-style: normal;
+  margin-bottom: 48px;
+}
+.mobile-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.mobile-phone {
+  color: #4d5ae5;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.mobile-email {
+  color: #434455;
+  font-size: 20px;
+  line-height: 1.2;
+}
+.mobile-social-list {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+.mobile-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #4d5ae5;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-social-link:hover,
+.mobile-social-link:focus {
+  background-color: #404bbf;
+}
+@media screen and (min-width: 768px) {
+  .mobile-menu {
+    display: none;
+  }
+}
