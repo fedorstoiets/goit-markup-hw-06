@@ -152,6 +152,9 @@
   }
 }
 @media screen and (min-width: 1158px) {
+  .logo {
+    margin-right: 76px;
+  }
   .address-list {
     flex-direction: row;
     gap: 40px;
