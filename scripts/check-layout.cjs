@@ -32,10 +32,12 @@ const path = require("node:path");
     if (bad) failed=true;
     if (width === 320) {
       await page.locator("[data-menu-open]").click();
-      const shown = await page.locator("[data-menu]").evaluate(e => e.classList.contains("is-open") && getComputedStyle(e).visibility === "visible");
+      await page.waitForFunction(() => { const e = document.querySelector("[data-menu]"); return e.classList.contains("is-open") && getComputedStyle(e).visibility === "visible"; }, { timeout: 3000 });
+      const shown = true;
       if (!shown) { console.error("Mobile menu is-open toggle failed"); failed=true; }
       await page.locator("[data-menu-close]").click();
-      const hidden = await page.locator("[data-menu]").evaluate(e => getComputedStyle(e).visibility === "hidden");
+      await page.waitForFunction(() => getComputedStyle(document.querySelector("[data-menu]")).visibility === "hidden", { timeout: 3000 });
+      const hidden = true;
       if (!hidden) { console.error("Mobile menu hiding failed"); failed=true; }
     }
     await page.close();
