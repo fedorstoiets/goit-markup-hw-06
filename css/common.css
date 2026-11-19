@@ -24,16 +24,6 @@ img {
   display: block;
   max-width: 100%;
 }
-.container {
-  width: 100%;
-  max-width: 1158px;
-  padding: 0 15px;
-  margin: 0 auto;
-}
-.section {
-  padding-top: 120px;
-  padding-bottom: 120px;
-}
 .sr-only {
   position: absolute;
   white-space: nowrap;
@@ -50,7 +40,7 @@ img {
 /* Mobile-first container and section geometry (320 / 768 / 1158). */
 .container {
   width: 100%;
-  max-width: 428px;
+  max-width: 320px;
   padding-right: 16px;
   padding-left: 16px;
 }
