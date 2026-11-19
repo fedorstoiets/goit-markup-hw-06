@@ -1,0 +1,105 @@
+name: Build Responsive WebStudio HW6
+on:
+  push:
+    paths:
+      - '.github/workflows/build-hw06.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy HW5 HTML, CSS, JS and SVG/JPG assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone -q --depth 1 https://github.com/fedorstoiets/goit-markup-hw-05.git /tmp/hw5
+          cp /tmp/hw5/index.html ./index.html
+          cp -r /tmp/hw5/css ./css
+          cp -r /tmp/hw5/images ./images
+          cp -r /tmp/hw5/js ./js
+      - name: Download 1x and 2x responsive design image assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://raw.githubusercontent.com/Liubjchka/goit-markup-hw-06/main/images"
+          download() {
+            curl --fail --location --silent --show-error --retry 3 "$base/$1" -o "images/$2"
+            test -s "images/$2"
+            file "images/$2" | grep -qi JPEG
+          }
+          download "people-office_1-mob-1x-min.jpg" "hero-mobile-1x.jpg"
+          download "people-office_1-mob-2x-min.jpg" "hero-mobile-2x.jpg"
+          download "people-office_1-tab-1x--min.jpg" "hero-tablet-1x.jpg"
+          download "people-office_1-tab-2x-min.jpg" "hero-tablet-2x.jpg"
+          download "people-office_1-min-desk-1x.jpg" "hero-desktop-1x.jpg"
+          download "people-office-1-min-desc-2x.jpg" "hero-desktop-2x.jpg"
+          download "Mark_Guerrero-1x-min.jpg" "team-1-1x.jpg"
+          download "Mark_Guerrero-2x-min.jpg" "team-1-2x.jpg"
+          download "Tom_Ford-1x-min.jpg" "team-2-1x.jpg"
+          download "Tom_Ford-2x-min.jpg" "team-2-2x.jpg"
+          download "Camila_Garcia-1x-min.jpg" "team-3-1x.jpg"
+          download "Camila_Garcia-2x-min.jpg" "team-3-2x.jpg"
+          download "Daniel_Wilson-1x-min.jpg" "team-4-1x.jpg"
+          download "Daniel_Wilson-2x-min.jpg" "team-4-2x.jpg"
+          download "Banking_App-1x-min.jpg" "portfolio-1-1x.jpg"
+          download "Banking_App-2x-min.jpg" "portfolio-1-2x.jpg"
+          download "Cashless_Payment-1x-min.jpg" "portfolio-2-1x.jpg"
+          download "Cashless_Payment-2x-min.jpg" "portfolio-2-2x.jpg"
+          download "Meditation_App-1x-min.jpg" "portfolio-3-1x.jpg"
+          download "Meditation_App-2x-min.jpg" "portfolio-3-2x.jpg"
+          download "Taxi_Service-1x-min.jpg" "portfolio-4-1x.jpg"
+          download "Taxi_Service-2x-min.jpg" "portfolio-4-2x.jpg"
+          download "Screen_ill-1x-min.jpg" "portfolio-5-1x.jpg"
+          download "Screen_ill-2x-min.jpg" "portfolio-5-2x.jpg"
+          download "Online-Courses-1x-min.jpg" "portfolio-6-1x.jpg"
+          download "Online-Courses-2x-min.jpg" "portfolio-6-2x.jpg"
+      - name: Build mobile-first responsive HTML and CSS
+        run: python3 scripts/build-responsive.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Format project with Prettier
+        run: npx --yes prettier@3.6.2 --write index.html css/*.css js/*.js README.md
+      - name: Verify Prettier formatting
+        run: npx --yes prettier@3.6.2 --check index.html css/*.css js/*.js README.md
+      - name: Validate file references and formal requirements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          h=Path("index.html").read_text()
+          c="".join(p.read_text() for p in Path("css").glob("*.css"))
+          css=Path("css/mobile-menu.css").read_text()
+          assert 'name="viewport"' in h
+          assert 'class="mobile-menu"' in h
+          assert h.index('class="mobile-menu"')>h.index('</footer>')
+          assert '.mobile-menu.is-open' in css
+          assert 'width: 100%' in css and 'height: 100%' in css
+          assert 'min-width: 768px' in c and 'min-width: 1158px' in c
+          assert 'min-resolution: 2dppx' in c
+          assert 'srcset=' in h and '<picture' not in h and '<source' not in h
+          assert re.search(r'\.team-item\s*\{[^}]*width:\s*264px;',c)
+          assert 'portfolio-overlay' in h and 'transform: translateY(100%)' in c
+          for name in re.findall(r'(?:src|href)="\./(images|js|css)/([^"]+)"',h):
+            # Skip SVG fragment when checking local file.
+            f=Path(name[0]) / name[1].split("#")[0]
+            assert f.is_file(),str(f)
+          for name in re.findall(r'url\(["\']?\.\./images/([^"\'\)]+)',c):
+            assert (Path("images")/name).is_file(),name
+          print("Formal responsive source assertions passed")
+          PY
+      - name: Commit HW6 source and responsive assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html css images js README.md
+          if ! git diff --cached --quiet; then
+            git commit -m "feat(hw06): mobile-first responsive WebStudio with retina assets"
+            git pull --rebase origin main
+            git push
+          fi
