@@ -1,13 +1,6 @@
-.hero {
-  padding-top: 188px;
-  padding-bottom: 188px;
-  background-color: #2e2f42;
-}
+
 .hero-title {
-  max-width: 496px;
-  margin: 0 auto 48px;
-  font-size: 56px;
-  line-height: 1.07;
+  margin: 0 auto;
   letter-spacing: 0.02em;
   text-align: center;
   color: #ffffff;
@@ -34,29 +27,27 @@
   background-color: #404bbf;
 }
 
-.hero {
-  max-width: 1440px;
-  margin: 0 auto;
-  background-image:
-    linear-gradient(rgba(46, 47, 66, 0.7), rgba(46, 47, 66, 0.7)),
-    url("../images/people-office.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+
 .hero-button {
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Mobile hero (1x & 2x), mobile first. */
+/* Mobile-first responsive hero. */
 .hero {
+  max-width: 1440px;
+  margin: 0 auto;
+  background-color: #2e2f42;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   padding: 72px 0;
   background-image:
     linear-gradient(rgba(46, 47, 66, 0.7), rgba(46, 47, 66, 0.7)),
     url("../images/hero-mobile-1x.jpg");
 }
 .hero-title {
-  max-width: 288px;
+  max-width: 216px;
+  margin-bottom: 72px;
   font-size: 36px;
   line-height: 1.11;
 }
@@ -78,6 +69,7 @@
     max-width: 496px;
     font-size: 56px;
     line-height: 1.07;
+    margin-bottom: 36px;
   }
 }
 @media screen and (min-width: 768px) and (min-resolution: 2dppx) {
@@ -94,6 +86,9 @@
     background-image:
       linear-gradient(rgba(46, 47, 66, 0.7), rgba(46, 47, 66, 0.7)),
       url("../images/hero-desktop-1x.jpg");
+  }
+  .hero-title {
+    margin-bottom: 48px;
   }
 }
 @media screen and (min-width: 1158px) and (min-resolution: 2dppx) {
