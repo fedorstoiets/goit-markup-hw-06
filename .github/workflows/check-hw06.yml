@@ -1,0 +1,37 @@
+name: Validate HW6 HTML and browser layout
+on:
+  push:
+    paths:
+      - '.github/workflows/check-hw06.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify source is Prettier formatted
+        run: npx --yes prettier@3.6.2 --check index.html css/*.css js/*.js README.md
+      - name: Validate HTML with official W3C Nu validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 3 -H "Content-Type: text/html; charset=utf-8" --data-binary @index.html "https://validator.w3.org/nu/?out=json" > /tmp/w3c.json
+          python3 - <<'PY'
+          import json
+          with open("/tmp/w3c.json") as f: data=json.load(f)
+          errors=[m for m in data.get("messages",[]) if m.get("type")=="error"]
+          for m in errors: print(m.get("lastLine"),m.get("message"))
+          print("W3C error count:",len(errors))
+          assert not errors
+          PY
+      - name: Install Chromium browser for responsive checks
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify eight widths and mobile menu in Chromium
+        run: node scripts/check-layout.cjs
