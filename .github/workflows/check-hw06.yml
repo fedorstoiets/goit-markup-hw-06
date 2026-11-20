@@ -1,4 +1,5 @@
 name: Validate HW6 HTML and browser layout
+# Recheck formatted LMS fixes on the current main commit
 on:
   push:
     paths:
