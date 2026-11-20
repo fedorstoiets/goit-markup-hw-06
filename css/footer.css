@@ -78,7 +78,6 @@
 
 .footer-subscribe-input {
   width: 100%;
-  max-width: 264px;
   height: 40px;
   padding: 8px 16px;
   border: 1px solid #ffffff;
@@ -137,6 +136,7 @@
 }
 .footer-brand {
   margin: 0 0 72px;
+  text-align: center;
 }
 .footer-social {
   margin-bottom: 72px;
@@ -153,6 +153,9 @@
 .footer-subscribe-title {
   text-align: center;
 }
+.footer-social-title {
+  text-align: center;
+}
 @media screen and (min-width: 768px) {
   .footer-container {
     max-width: 584px;
@@ -163,9 +166,13 @@
   }
   .footer-brand {
     margin: 0 24px 72px 0;
+    text-align: left;
   }
   .footer-social {
     margin-bottom: 72px;
+  }
+  .footer-social-title {
+    text-align: left;
   }
   .footer-subscribe {
     margin-left: 0;
@@ -174,6 +181,9 @@
     flex-direction: row;
     align-items: center;
     gap: 24px;
+  }
+  .footer-subscribe-input {
+    width: 264px;
   }
   .footer-subscribe-title {
     text-align: left;
