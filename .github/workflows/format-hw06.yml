@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - '.github/workflows/format-hw06.yml'
+      - 'css/**'
+      - 'index.html'
   workflow_dispatch:
 permissions:
   contents: write
