@@ -138,6 +138,9 @@
   margin: 0 0 72px;
   text-align: center;
 }
+.footer-text {
+  text-align: left;
+}
 .footer-social {
   margin-bottom: 72px;
 }
