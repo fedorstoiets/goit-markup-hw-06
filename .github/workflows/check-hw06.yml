@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '.github/workflows/check-hw06.yml'
+      - '.github/workflows/format-hw06.yml'
       - 'scripts/check-layout.cjs'
       - 'index.html'
       - 'css/**'
